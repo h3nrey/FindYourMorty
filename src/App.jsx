@@ -1,21 +1,20 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react'
+import portalImg from "./assets/Portal.png"
 
 //Phosphor
-import { ArrowLeft, ArrowRight, Check, Funnel } from 'phosphor-react'
-
-//radix
-import * as Popover from '@radix-ui/react-popover';
-import * as Checkbox from '@radix-ui/react-checkbox';
+import { ArrowLeft, ArrowRight} from 'phosphor-react'
 
 import { filterSearch } from './searchFilter';
 import { CharacterGrid } from './components/CharactersGrid';
+import { FilterPopover } from './components/FilterPopover';
+import { SearchBox } from './components/SearchBox';
+import { data } from 'autoprefixer';
+
 const apiUrl = "https://rickandmortyapi.com/api/character"
 
 function App() {
   const [apiData, setApiData] = useState([]);
-  const [apiDataResults, setApiDataResults] = useState([]);
-  const [characters, setCharacters] = useState([]);
 
   //search
   const [searchText, setSearchText] = useState("");
@@ -24,12 +23,7 @@ function App() {
   const [page, setPage] = useState(1)
 
   //filters
-  const [searchFilters, setSearchFilters] = useState([
-    {
-      prop: "",
-      value: ""
-    }
-  ])
+  const [searchFilters, setSearchFilters] = useState([])
 
   
   function handleSetPage(amount) {
@@ -38,19 +32,11 @@ function App() {
     }
   }
   useEffect(() => {
-    axios.get(`${apiUrl}?page=${page}`).then(res => {
+    setApiData([])
+    axios.get(`${apiUrl}?page=${page}&name=${searchText}`).then(res => {
       setApiData(res.data);
-      setApiDataResults(res.data.results)
-      setCharacters(res.data.results)
     })
-  }, [page])
-
-  useEffect(() => {
-    if(apiDataResults) {
-      // console.log("teste")
-      setCharacters(filterSearch(searchText, false, true, apiDataResults, searchFilters))
-    }
-  }, [searchText, searchFilters])
+  }, [page, searchText])
   
   return (
     <div className="App px-6 xl:px-[8rem]">
@@ -58,73 +44,41 @@ function App() {
         <span className='text-[2.25rem] capitalize'>f</span>ind Your <span className='text-[2.25rem] capitalize'>m</span>orty
       </h1>
 
-      <div tittle="search__box" className='mt-8 flex md:block'>
-        <input 
-          type="text" 
-          value={searchText}
-          onChange={(ev) => setSearchText(ev.target.value)}
-          className='bg-darkPurple w-full font-header py-4 px-6 rounded-lg text-[1.125rem]' 
-          placeholder='Search a Character...'
-        />
-        <button className='bg-yellow p-5 rounded-r-md md:hidden'>
-          <Funnel size={20} weight="fill" className="text-purpleBg"/>
-        </button>
-      </div>
+      <SearchBox value={searchText} onChange={setSearchText}/>
       
-      <div title='filters' className='mt-4'>
-        <Popover.Root>
-          <Popover.Trigger className='bg-aqua text-gray rounded-lg px-4 py-[0.75rem]'>
-            species
-          </Popover.Trigger>
+      <div title='filters' className='flex gap-6 mt-4'>
 
-          <Popover.Portal>
-            <Popover.Content 
-              align="start" 
-              className="bg-darkPurple flex flex-col px-10 pl-6 py-6 gap-3 rounded-md">
-              <div className='flex gap-4'>
-                <button 
-                className="p-1 w-6 bg-cream rounded-sm content-['']"
-                onClick={() => setSearchFilters([{prop: "species", value: "human"}])}
-                >  
-                  { searchFilters.length > 0 && searchFilters[0].value == "human" && (
-                      <Check weight='bold'></Check> 
-                    )
-                  }
-                </button>
-                <span className='text-aqua text-[1.125rem]'>human</span>
-              </div>
-              <div className='flex gap-4'>
-                <button 
-                  className="p-1 w-6 bg-cream rounded-sm content-['']"
-                  onClick={() => setSearchFilters([{prop: "species", value: "alien"}])}
-                >  
-                  { searchFilters.length > 0 && searchFilters[0].value == "alien" && (
-                      <Check weight='bold'></Check> 
-                    )
-                  }
-                </button>
-                <span className='text-aqua text-[1.125rem]'>Alien</span>
-              </div>
-              <div className='flex gap-4'>
-                <button 
-                  className="p-1 w-6 bg-cream rounded-sm content-['']"
-                  onClick={() => setSearchFilters([{prop: "species", value: "humanoid"}])}
-                >  
-                  { searchFilters.length > 0 && searchFilters[0].value == "humanoid" && (
-                      <Check weight='bold'></Check> 
-                    )
-                  }
-                </button>
-                <span className='text-aqua text-[1.125rem]'>Humanoid</span>
-              </div>
-            </Popover.Content>
-          </Popover.Portal>
-        </Popover.Root>
+        <FilterPopover 
+          filtersSearch={searchFilters} 
+          setSearchFilters={setSearchFilters} 
+          filterProp = {"species"}
+          tags={[{title: "human"}, {title: "alien"}, {title: "humanoid"}, {title:"mythological creature"}]}
+        />
+        <FilterPopover 
+          filtersSearch={searchFilters} 
+          setSearchFilters={setSearchFilters} 
+          filterProp = {"status"}
+          tags={[{title: "dead"}, {title: "alive"}, {title: "unkown"}]}
+        />
+        {
+          searchFilters.map(filter => {
+            return(
+              <p>{filter}</p>
+            )
+          })
+        }
       </div>
       
+      {searchText && apiData.length == 0 && (
+        <div className='w-full py-20 flex items-center justify-center'>
+          <img src={portalImg} alt="loading" className='loading animate-spin rounded-full'/>
+        </div>
+        )
+      }
+
       {
-        characters.length > 0 && (
-          <CharacterGrid props={characters}/>
+        apiData.results && (
+          <CharacterGrid props={apiData.results}/>
 
         )
       }

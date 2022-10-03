@@ -27,7 +27,7 @@ export function CharacterGrid({props}) {
                         <span className="text-yellow"> ({character.species})</span>
                       </div>
                       
-                      <span className="text-gray text-[1.125rem]"> {character.status} | {character.episode.length}</span>
+                      <span className="text-gray text-[1.125rem]"> {character.status} | {character.episode.length} episodes</span>
                     </div>
                   </li>
                 )

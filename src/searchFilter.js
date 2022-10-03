@@ -21,14 +21,11 @@ function searchByText(array, text) {
 
 
 function filterByTag(array, filters){
-  let accumulatorArray = [];
+  let filteredArray = array;
   filters.forEach(filter => {
-    console.log(`----- TESTE ---- ${array.filter(el => el[filter.prop] == filter.value)} `)
-    let nowArray = array.filter(el => el[filter.prop].toLowerCase() == filter.value.toLowerCase() )
-    accumulatorArray.push(...nowArray)
+    filteredArray = filteredArray.filter((el) => el[filter.prop].toLowerCase() == filter.value.toLowerCase())
   })
-  console.log(accumulatorArray)
-  return accumulatorArray
+  return filteredArray;
 }
 
 function sortArrayByPropertie(prop, isNumber, array, asc) {

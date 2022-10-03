@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .loading{
+  }
+
+  .search__input:focus-visible + span{
+    width: 100%;
+  }
+
+}
