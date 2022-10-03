@@ -19,6 +19,12 @@ module.exports = {
       header: "Pangolin"
     },
     extend: {},
+    screens: {
+      'sm': '400px',
+      "md": "700px",
+      "lg": "1000px",
+      "xl": "1400px",
+    }
   },
   plugins: [],
 }
