@@ -3,8 +3,8 @@ export function CharacterGrid({props}) {
 
     <>
       {
-        props.length > 0 ? (
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-12">
+        props.length > 0 && (
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {
               props.map(character => {
                 return(
@@ -27,15 +27,13 @@ export function CharacterGrid({props}) {
                         <span className="text-yellow"> ({character.species})</span>
                       </div>
                       
-                      <span className="text-gray text-[1.125rem]"> {character.status} | {character.episode.length} episodes</span>
+                      <span className="text-gray text-[1.125rem]"> {character.status} | {character.episode.length} episode(s)</span>
                     </div>
                   </li>
                 )
               })
             }
           </ul>
-        ) : (
-          <p>Dont have any character with this filters</p>
         )}
     </>
       

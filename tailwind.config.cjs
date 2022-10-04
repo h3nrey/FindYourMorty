@@ -18,7 +18,17 @@ module.exports = {
       title: "Rock Salt",
       header: "Pangolin"
     },
-    extend: {},
+    extend: {
+      keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.2)' },
+        }
+      },
+      animation: {
+        wiggle: "wiggle 1s infinite"
+      }
+    },
     screens: {
       'sm': '400px',
       "md": "700px",
