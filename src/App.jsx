@@ -3,14 +3,15 @@ import { useEffect, useState } from 'react'
 import portalImg from "./assets/Portal.png"
 
 //Phosphor
-import { ArrowLeft, ArrowRight, CaretDoubleLeft, CaretDoubleRight} from 'phosphor-react'
+import { ArrowLeft, ArrowRight, ArrowUp, CaretDoubleLeft, CaretDoubleRight} from 'phosphor-react'
 
-import { filterSearch } from './searchFilter';
 import { CharacterGrid } from './components/CharactersGrid';
 import { FilterPopover } from './components/FilterPopover';
 import { SearchBox } from './components/SearchBox';import { PagesButton } from './components/PagesButton';
 import { Footer } from './components/Footer';
 ;
+
+
 
 const apiUrl = "https://rickandmortyapi.com/api/character"
 
@@ -28,6 +29,13 @@ function App() {
   const [characterStatus, setCharacterStatus] = useState("")
   const [characterSpecie, setCharacterSpecie] = useState("")
   const [loading, setLoading] = useState(false);
+
+  //scroll
+  const [pageScroll, setPageScroll] = useState(0);
+
+  window.addEventListener("scroll", () => {
+    setPageScroll(window.scrollY)
+  })
 
   function setSearchFilters (prop, value){
     switch (prop) {
@@ -61,14 +69,15 @@ function App() {
       console.error(error)
       setLoading(false);
       setApiData(["error"])
-      setActualPage(0)
+      setActualPage(1)
+      setPages(0)
     })
   }, [actualPage, searchText, characterStatus, characterSpecie])
   
   return (
     <div className="App px-6 xl:px-[8rem]">
-      <h1 className='text-aqua font-title text-[2rem] xl:text-[4rem] mt-12 text-center px-10'>
-        <span className='text-[2.25rem] xl:text-[6rem] capitalize'>f</span>ind Your <span className='text-[2.25rem] xl:text-[6rem] capitalize'>m</span>orty
+      <h1 className='text-aqua font-title text-[2rem] md:text-[3rem] lg:text-[4rem] mt-12 text-center px-10'>
+        <span className='text-[2.25rem] md:text-[4rem] lg:text-[6rem] capitalize'>f</span>ind Your <span className='text-[2.25rem] md:text-[4rem] lg:text-[6rem] capitalize'>m</span>orty
       </h1>
 
       <SearchBox value={searchText} onChange={setSearchText}/>
@@ -118,9 +127,21 @@ function App() {
         )}
 
       </div>
+      
+      
 
+      { pageScroll > 10 && (
+        <button 
+        onClick={() => window.scroll({top: 0, behavior: 'smooth'  })}
+        className='fixed bottom-6 right-10 bg-yellow p-2 rounded-lg text-darkPurple animate-shake'>
+          <ArrowUp size={24}/>
+        </button>
 
-      <PagesButton pages={pages} actualPage={actualPage} setActualPage={setActualPage}/>
+      )}
+
+      {actualPage > 0 && (
+        <PagesButton pages={pages} actualPage={actualPage} setActualPage={setActualPage}/>
+      )}
       
       <Footer />
     </div>

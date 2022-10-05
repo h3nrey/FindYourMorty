@@ -3,7 +3,7 @@ import { Check } from "phosphor-react";
 import { useState } from "react";
 
 
-export function FilterPopover({filtersSearch, filterProp, tags, setSearchFilters}) {
+export function FilterPopover({filterProp, tags, setSearchFilters}) {
 
   const [selectedFilter, setSelectedFilter] = useState();
   return (
@@ -23,7 +23,7 @@ export function FilterPopover({filtersSearch, filterProp, tags, setSearchFilters
                       return (
                         <li className='flex gap-4' key={tag.title}>
                           <button 
-                            className="p-1 w-6 h-6 bg-cream rounded-sm content-['']"
+                            className="p-1 w-6 h-6 bg-yellow rounded-sm content-['']"
                             onClick={() => {
                               if(selectedFilter == tag.title) {
                                 setSelectedFilter()

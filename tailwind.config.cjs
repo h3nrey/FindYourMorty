@@ -20,13 +20,20 @@ module.exports = {
     },
     extend: {
       keyframes: {
-        wiggle: {
+        scale: {
           '0%, 100%': { transform: 'scale(1)' },
           '50%': { transform: 'scale(1.2)' },
+        },
+        shake: {
+          '0%, 100%': {transform: 'rotate(0deg)'},
+          '40%': {transfrom: "rotate(50deg) scaleX(0.5)" },
+          "80%": {transform: "translate(-20px) scale(0.8)"},
+          "95": {transform: "rotate(5deg)"}
         }
       },
       animation: {
-        wiggle: "wiggle 1s infinite"
+        scale: "scale 1s infinite",
+        shake: "shake 0.6s 1"
       }
     },
     screens: {
