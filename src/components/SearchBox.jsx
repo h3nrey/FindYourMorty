@@ -13,7 +13,7 @@ export function SearchBox({value, onChange}) {
     debouncedChange(text);
   }
   return (
-    <div tittle="search__box" className='mt-8 flex md:block overflow-hidden'>
+    <div tittle="search__box" className='mt-8 flex md:block group overflow-hidden'>
         <div className="flex flex-col relative">
           <input 
             type="text" 
@@ -23,9 +23,8 @@ export function SearchBox({value, onChange}) {
             placeholder='Search a Character...'
           />
           <span 
-          className="bg-aqua w-0 h-2 content-[''] absolute bottom-0 rounded-lg group-focus:w-full transition-all">
+          className="bg-aqua w-0 h-2 content-[''] absolute bottom-0 rounded-lg transition-all">
           </span>
-
           {
             displayValue && (
               <button onClick={() => {

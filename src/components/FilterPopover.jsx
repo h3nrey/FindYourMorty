@@ -9,8 +9,8 @@ export function FilterPopover({filtersSearch, filterProp, tags, setSearchFilters
   return (
     <Popover.Root>
           <Popover.Trigger className='bg-aqua text-gray rounded-lg px-4 py-[0.75rem] 
-          hover:bg-darkPurple hover:outline hover:outline-aqua '>
-            {filterProp}
+          hover:bg-darkPurple hover:outline flex gap-2 outline outline-aqua outline-0 hover:outline-4 transition-all'>
+            {filterProp} <span className="text-yellow hidden md:block font-header text-[1.125rem]">{selectedFilter}</span>
           </Popover.Trigger>
 
           <Popover.Portal>

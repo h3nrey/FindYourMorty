@@ -33,7 +33,7 @@ module.exports = {
       'sm': '400px',
       "md": "700px",
       "lg": "1000px",
-      "xl": "1400px",
+      "xl": "1350px",
     }
   },
   plugins: [],

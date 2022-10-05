@@ -8,7 +8,9 @@ import { ArrowLeft, ArrowRight, CaretDoubleLeft, CaretDoubleRight} from 'phospho
 import { filterSearch } from './searchFilter';
 import { CharacterGrid } from './components/CharactersGrid';
 import { FilterPopover } from './components/FilterPopover';
-import { SearchBox } from './components/SearchBox';;
+import { SearchBox } from './components/SearchBox';import { PagesButton } from './components/PagesButton';
+import { Footer } from './components/Footer';
+;
 
 const apiUrl = "https://rickandmortyapi.com/api/character"
 
@@ -36,7 +38,8 @@ function App() {
         case "status":
           setCharacterStatus(value);
           break;
-        }
+    }
+    setActualPage(1);
   }
   
   function handleSetPage(amount) {
@@ -45,16 +48,6 @@ function App() {
     }
   }
 
-  function handleSetPages(totalOfPages) {
-    console.log(`total of pages: ${totalOfPages}`)
-    if(pages <= totalOfPages) {
-      for (let i = 1; i <= totalOfPages; i++) {
-        let array = pages;
-        array.push(i);
-        setPages(array)
-      }
-    }
-  }
   useEffect(() => {
     setLoading(true)
     setApiData([])
@@ -62,14 +55,14 @@ function App() {
     .then(res => {
       setApiData(res.data);
       setLoading(false);
-      handleSetPages(res.data.info.pages)
+      setPages(res.data.info.pages)
     })
     .catch((error) => {
       console.error(error)
       setLoading(false);
       setApiData(["error"])
+      setActualPage(0)
     })
-    console.log(apiData)
   }, [actualPage, searchText, characterStatus, characterSpecie])
   
   return (
@@ -111,49 +104,25 @@ function App() {
         )
       }
 
+      {/* <PagesButton pages={pages} actualPage={actualPage} setActualPage={setActualPage}/> */}
+
       <div className='mt-12'>
-        { apiData.results && !loading ? (<CharacterGrid props={apiData.results}/>) : (
+        { apiData.results && !loading && (
+          <CharacterGrid props={apiData.results}/>
+        )}
+
+        { !apiData.results && !loading && (
           <span className='text-gray font-header text-4xl text-center md:text-center'>
             It seems like there's no character with these name or filters
-          </span>
+         </span>
         )}
 
       </div>
 
 
-      <div className='flex gap-2 mt-8 w-full overflow-hidden'> 
-        <button 
-          onClick={() => setActualPage(1)}
-          className='hidden md:block bg-aqua p-2 text-gray rounded-md'>
-          <CaretDoubleLeft size={24} className='text-gray'/>
-        </button>
-
-        {apiData.info && pages.length > 0 && pages.map(page => {
-            if((page <= actualPage + 2 && page >= actualPage - 2) || (page <= 5 && actualPage < 4) || (page >= pages.length - 4 && actualPage >= pages.length -2)) {
-              return(
-                <button 
-                  key={`page${page}`}
-                  className='p-3 px-4 bg-darkPurple text-gray rounded-md'
-                  onClick={() => setActualPage(page)}
-                  style={{backgroundColor: actualPage != page ? '#241A2E' : "#16BD91"}}
-                  > 
-                  {page}
-                </button>
-              )
-            }
-          })
-        }
-
-        <button 
-          onClick={() => {
-            console.log(pages.length)
-            setActualPage(pages.length)
-          }}
-          className=' hidden md:block bg-aqua p-2 text-gray rounded-md'>
-          <CaretDoubleRight size={24} className='text-gray'/>
-        </button>
-      </div>
-
+      <PagesButton pages={pages} actualPage={actualPage} setActualPage={setActualPage}/>
+      
+      <Footer />
     </div>
   )
 }
