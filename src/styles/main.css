@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 @layer utilities {
-  .loading{
-  }
-
   .search__input:focus-visible + span{
     width: 100%;
   }
 
+  .title{
+    text-shadow: 3px 2px 0px #fddb8d, -3px -2px 0 #fddb8d, 0 0 0em yellow;
+  }
 
 }

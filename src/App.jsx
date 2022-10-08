@@ -1,17 +1,16 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react'
+import axios from 'axios';
+
+//assets
 import portalImg from "./assets/Portal.png"
 
-//Phosphor
-import { ArrowLeft, ArrowRight, ArrowUp, CaretDoubleLeft, CaretDoubleRight} from 'phosphor-react'
-
+//components
 import { CharacterGrid } from './components/CharactersGrid';
 import { FilterPopover } from './components/FilterPopover';
 import { SearchBox } from './components/SearchBox';import { PagesButton } from './components/PagesButton';
 import { Footer } from './components/Footer';
-;
-
-
+import { ScrollupButton } from './components/ScrollupButton';
+import { Title } from './components/Title';
 
 const apiUrl = "https://rickandmortyapi.com/api/character"
 
@@ -28,14 +27,9 @@ function App() {
   //filters
   const [characterStatus, setCharacterStatus] = useState("")
   const [characterSpecie, setCharacterSpecie] = useState("")
+
+  //loading  
   const [loading, setLoading] = useState(false);
-
-  //scroll
-  const [pageScroll, setPageScroll] = useState(0);
-
-  window.addEventListener("scroll", () => {
-    setPageScroll(window.scrollY)
-  })
 
   function setSearchFilters (prop, value){
     switch (prop) {
@@ -43,17 +37,11 @@ function App() {
         setCharacterSpecie(value);
         break;
         
-        case "status":
-          setCharacterStatus(value);
-          break;
+      case "status":
+        setCharacterStatus(value);
+        break;
     }
     setActualPage(1);
-  }
-  
-  function handleSetPage(amount) {
-    if(actualPage > 0 && actualPage < apiData.info.count) {
-      setActualPage(actualPage + amount)
-    }
   }
 
   useEffect(() => {
@@ -66,7 +54,7 @@ function App() {
       setPages(res.data.info.pages)
     })
     .catch((error) => {
-      console.error(error)
+      console.log(error);
       setLoading(false);
       setApiData(["error"])
       setActualPage(1)
@@ -76,14 +64,11 @@ function App() {
   
   return (
     <div className="App px-6 xl:px-[8rem]">
-      <h1 className='text-aqua font-title text-[2rem] md:text-[3rem] lg:text-[4rem] mt-12 text-center px-10'>
-        <span className='text-[2.25rem] md:text-[4rem] lg:text-[6rem] capitalize'>f</span>ind Your <span className='text-[2.25rem] md:text-[4rem] lg:text-[6rem] capitalize'>m</span>orty
-      </h1>
+      <Title />
 
       <SearchBox value={searchText} onChange={setSearchText}/>
       
       <div title='filters' className='flex gap-6 mt-4'>
-
         <FilterPopover 
           setSearchFilters={setSearchFilters} 
           filterProp = {"species"}
@@ -108,12 +93,13 @@ function App() {
       
       {loading && (
         <div className='w-full py-20 flex items-center justify-center'>
-          <img src={portalImg} alt="loading" className='loading animate-spin rounded-full'/>
+          <img 
+          src={portalImg} 
+          alt="loading" 
+          className='loading animate-spin rounded-full'/>
         </div>
         )
       }
-
-      {/* <PagesButton pages={pages} actualPage={actualPage} setActualPage={setActualPage}/> */}
 
       <div className='mt-12'>
         { apiData.results && !loading && (
@@ -125,19 +111,9 @@ function App() {
             It seems like there's no character with these name or filters
          </span>
         )}
-
       </div>
       
-      
-
-      { pageScroll > 10 && (
-        <button 
-        onClick={() => window.scroll({top: 0, behavior: 'smooth'  })}
-        className='fixed bottom-6 right-10 bg-yellow p-2 rounded-lg text-darkPurple animate-shake'>
-          <ArrowUp size={24}/>
-        </button>
-
-      )}
+      <ScrollupButton /> 
 
       {actualPage > 0 && (
         <PagesButton pages={pages} actualPage={actualPage} setActualPage={setActualPage}/>
